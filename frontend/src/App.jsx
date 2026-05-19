@@ -9,7 +9,16 @@ import {
   Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell 
 } from 'recharts';
 
-const API_URL = 'http://localhost:5000/api/documents';
+// ==========================================
+// 🚀 DYNAMIC PROTOCOL FALLBACK CHECKING ENGINE
+// ==========================================
+const IS_LOCAL_RUNTIME = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const LIVE_BACKEND_BASE = 'https://biztelai-backend.onrender.com';
+const LOCAL_BACKEND_BASE = 'http://localhost:5000';
+
+const BACKEND_BASE_URL = IS_LOCAL_RUNTIME ? LOCAL_BACKEND_BASE : LIVE_BACKEND_BASE;
+const API_URL = `${BACKEND_BASE_URL}/api/documents`;
+
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
 export default function App() {
@@ -63,7 +72,8 @@ export default function App() {
       if (response.data && response.data.success) {
         setActiveReviewRecord(response.data.data);
         if (response.data.data && response.data.data.filePath) {
-          setFilePreview(`http://localhost:5000/${response.data.data.filePath}`);
+          // DYNAMIC RE-ROUTE ENGINE SECURED HERE
+          setFilePreview(`${BACKEND_BASE_URL}/${response.data.data.filePath}`);
         }
         fetchRecordsHistory();
         setSelectedFile(null);
@@ -105,7 +115,8 @@ export default function App() {
   const loadDocumentIntoDeck = (rec) => {
     setActiveReviewRecord(rec);
     if (rec && rec.filePath) {
-      setFilePreview(`http://localhost:5000/${rec.filePath}`);
+      // DYNAMIC RE-ROUTE ENGINE SECURED HERE
+      setFilePreview(`${BACKEND_BASE_URL}/${rec.filePath}`);
     }
   };
 
@@ -145,11 +156,11 @@ export default function App() {
   // ==========================================
   // 🔍 CRITICAL FIX: SAFE SEARCH FILTER LOGIC
   // ==========================================
- const filteredRecords = safeRecords.filter(rec => {
+  const filteredRecords = safeRecords.filter(rec => {
     const term = (searchQuery || '').toLowerCase().trim();
     if (!term) return true;
 
-    const fName = (rec.fileName || '').toLowerCase(); // Added filename filter tracking
+    const fName = (rec.fileName || '').toLowerCase();
     const mac = (rec.extractedData?.machineNumber || '').toLowerCase();
     const emp = (rec.extractedData?.employeeNumber || '').toLowerCase();
     const wo = (rec.extractedData?.workOrderNumber || '').toLowerCase();
@@ -311,7 +322,7 @@ export default function App() {
                           {field.replace(/([A-Z])/g, ' $1')} {uncertain && <span className="text-amber-500 font-bold">(Low Confidence)</span>}
                         </label>
                         <input 
-                          type={field === 'quantityProduced' ? 'text' : 'text'} 
+                          type="text" 
                           value={displayVal} 
                           onChange={(e) => handleFieldChange(field, e.target.value)} 
                           className={`w-full bg-gray-900 text-white rounded p-2 outline-none transition-colors border ${
