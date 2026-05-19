@@ -59,9 +59,7 @@ Database Storage
 
 ### Dashboard
 
-```md
 ![Dashboard](./dashboard-screenshot.png)
-```
 
 
 ---
