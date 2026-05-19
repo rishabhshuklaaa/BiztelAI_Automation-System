@@ -1,18 +1,24 @@
 import mongoose from 'mongoose';
 
+// Flexible sub-document definition to cleanly track value and confidence per field
+const FieldSchema = new mongoose.Schema({
+  value: { type: String, default: '—' },
+  confidence: { type: Number, default: 100 }
+}, { _id: false });
+
 const recordSchema = new mongoose.Schema({
   fileName: { type: String, required: true },
   filePath: { type: String, required: true },
   
   extractedData: {
-    date: { type: String, default: "" },
-    shift: { type: String, default: "" }, // Will hold I, II, or III
-    employeeNumber: { type: String, default: "" },
-    opnCode: { type: String, default: "" }, // ADDED THIS NEWFIELD
-    machineNumber: { type: String, default: "" },
-    workOrderNumber: { type: String, default: "" },
-    quantityProduced: { type: Number, default: null },
-    timeTaken: { type: String, default: "" }
+    date: FieldSchema,
+    shift: FieldSchema,
+    employeeNumber: FieldSchema,
+    opnCode: FieldSchema,
+    machineNumber: FieldSchema,
+    workOrderNumber: FieldSchema,
+    quantityProduced: FieldSchema,
+    timeTaken: FieldSchema
   },
   
   confidenceScore: { type: Number, default: 100 },
