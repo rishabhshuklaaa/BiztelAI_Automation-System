@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* Minimal clean reset to enforce body dark styling defaults */
+html, body {
+  background-color: #111827 !important; /* Forces dark gray bg */
+  color: #f3f4f6 !important;            /* Forces light text color */
+}
