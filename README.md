@@ -64,8 +64,6 @@ Database Storage
 ```
 
 
-> Create a `screenshots/` folder in the root directory and place images there.
-
 ---
 
 # 🏗️ Tech Stack
